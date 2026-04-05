@@ -21,13 +21,12 @@ services:
       - GMAIL_CLIENT_ID=${GMAIL_CLIENT_ID}
       - GMAIL_CLIENT_SECRET=${GMAIL_CLIENT_SECRET}
       - SESSION_SECRET=${SESSION_SECRET:-super-secret-key}
-      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - BACKEND_URL=${BACKEND_URL}
     ports:
       - "8000:8000"
     depends_on:
       - db
-    volumes:
-      - ./backend:/app
 
   frontend:
     build: ./frontend
@@ -38,10 +37,8 @@ services:
     depends_on:
       - backend
     environment:
-      - VITE_API_URL=http://localhost:8000
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - VITE_API_URL=${BACKEND_URL}
+
 
 volumes:
   postgres_data:

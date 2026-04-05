@@ -52,9 +52,50 @@ This guide helps you deploy the **Job Email Tracker** to your home server and ac
     - Open your browser (on any device connected to your Tailnet).
     - Go to `http://<YOUR_TAILSCALE_URL>:3000`.
 
-## Re-authentication
+## Phase 4: Verification & Access
 
-If you move the app to a different Tailscale IP or use MagicDNS later, you **MUST** update:
+1.  **Open your browser** (on any device connected to your Tailnet).
+2.  **Go to the Frontend URL**: `http://tail1921db.ts.net:3000`
+3.  **Ensure the Backend link is reachable**: `http://tail1921db.ts.net:8000`.
+
+---
+
+## (Optional) Advanced: Enable HTTPS (Tailscale SSL)
+
+If you later want to use **`https://`** and remove the `:3000` port number:
+
+1.  **Enable HTTPS Certificates** in your [Tailscale Settings](https://login.tailscale.com/admin/dns).
+
+2.  **Run Tailscale Serve** on the server:
+    ```bash
+    tailscale serve --bg 3000
+    tailscale serve --bg 8000 8000
+    ```
+
+3.  **Update `.env`**:
+    ```ini
+    BACKEND_URL=https://tail1921db.ts.net:8000
+    FRONTEND_URL=https://tail1921db.ts.net
+    ```
+
+4.  **Update Google OAuth Redirect URI**: `https://tail1921db.ts.net:8000/auth/callback`
+
+
+## Common Errors & Troubleshooting
+
+### Portainer Build Failures (DNS)
+- **Error**: `lookup registry-1.docker.io: server misbehaving`
+- **Fix**: Your server has a DNS issue. Run `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf` to use Google DNS temporarily.
+- **Portainer Tip**: Always use the **Git Repository** method in Portainer Stacks instead of the Web Editor to ensure the build context is correct.
+
+### 400: redirect_uri_mismatch
+- Ensure the URI in **Google Cloud Console** exactly matches `BACKEND_URL + /auth/callback`.
+- If using HTTPS via Tailscale Serve, the URI must start with `https://`.
+
+## Re-authentication & Updates
+
+If you change your Tailscale hostname or move the app later, you **MUST** update:
 1. The `.env` file (`BACKEND_URL` and `FRONTEND_URL`).
 2. The Google Cloud Console Redirect URI.
 3. Restart the containers: `docker-compose up -d --build`.
+

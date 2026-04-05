@@ -43,7 +43,10 @@ export default function EmailCard({ email, onUpdate }) {
     onUpdate();
   };
 
-  const timeAgo = formatDistanceToNow(new Date(email.received_at), { addSuffix: true });
+  const timeAgo = (() => {
+    try { return formatDistanceToNow(new Date(email.received_at), { addSuffix: true }); }
+    catch { return email.received_at || ''; }
+  })();
 
   return (
     <div className={`p-5 rounded-xl shadow-sm border ${email.is_unread ? 'border-l-4 border-l-blue-500 bg-white' : 'border-gray-200 bg-gray-50'}`}>
@@ -106,12 +109,22 @@ export default function EmailCard({ email, onUpdate }) {
       {/* URLs Chips */}
       {email.urls && email.urls.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
-          {email.urls.map((url, idx) => (
-            <a key={idx} href={url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-medium hover:bg-blue-100 transition-colors">
-              <Link size={12} />
-              {new URL(url).hostname}
-            </a>
-          ))}
+          {email.urls
+            .filter(url => {
+              try { return Boolean(new URL(url)); }
+              catch { return false; }
+            })
+            .map((url, idx) => {
+              let hostname = url;
+              try { hostname = new URL(url).hostname; } catch { /* ignore */ }
+              return (
+                <a key={idx} href={url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-medium hover:bg-blue-100 transition-colors">
+                  <Link size={12} />
+                  {hostname}
+                </a>
+              );
+            })
+          }
         </div>
       )}
       

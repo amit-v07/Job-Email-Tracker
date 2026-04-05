@@ -15,7 +15,7 @@ class EmailUpdate(BaseModel):
     is_unread: Optional[bool] = None
     snoozed_until: Optional[datetime] = None
 
-@router.get("/")
+@router.get("")
 def get_emails(
     account: Optional[str] = None,
     status: Optional[str] = None,

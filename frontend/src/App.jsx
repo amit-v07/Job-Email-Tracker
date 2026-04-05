@@ -53,9 +53,10 @@ function App() {
             </div>
             {/* Quick auth links - in testing mode */}
             <div className="ml-4 flex gap-2 border-l pl-4">
-               <a href="http://localhost:8000/auth/gmail/work" className="text-xs bg-slate-100 px-2 py-1 flex items-center gap-1 rounded hover:bg-slate-200"><Briefcase size={12}/> Work Login</a>
-               <a href="http://localhost:8000/auth/gmail/personal" className="text-xs bg-slate-100 px-2 py-1 flex items-center gap-1 rounded hover:bg-slate-200"><User size={12}/> Personal Login</a>
+               <a href="/api/auth/gmail/work" className="text-xs bg-slate-100 px-2 py-1 flex items-center gap-1 rounded hover:bg-slate-200"><Briefcase size={12}/> Work Login</a>
+               <a href="/api/auth/gmail/personal" className="text-xs bg-slate-100 px-2 py-1 flex items-center gap-1 rounded hover:bg-slate-200"><User size={12}/> Personal Login</a>
             </div>
+
           </div>
         </div>
       </header>

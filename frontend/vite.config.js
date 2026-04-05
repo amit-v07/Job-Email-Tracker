@@ -9,6 +9,14 @@ export default defineConfig({
     host: true, // Needed for docker
     watch: {
       usePolling: true, // Needed for docker file watching on some OS
-    }
+    },
+    proxy: {
+      // All /api calls are forwarded to the backend container
+      '/api': {
+        target: 'http://backend:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   }
 })

@@ -1,4 +1,5 @@
-FROM node:20-alpine
+# ─── Stage 1: Build ────────────────────────────────────────────────────────
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -7,8 +8,18 @@ RUN npm install
 
 COPY . .
 
-# Expose Vite default dev server port
+# Build production bundle (single optimised JS + CSS)
+RUN npm run build
+
+# ─── Stage 2: Serve with nginx ─────────────────────────────────────────────
+FROM nginx:alpine
+
+# Copy built assets
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy custom nginx config (proxy /api/ → backend)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 3000
 
-# Start Vite with --host to allow external access within Docker network
-CMD ["npm", "run", "dev"]
+CMD ["nginx", "-g", "daemon off;"]

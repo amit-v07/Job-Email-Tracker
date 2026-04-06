@@ -7,6 +7,7 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true, // Needed for docker
+    allowedHosts: 'all', // Allow Tailscale and all external hostnames
     watch: {
       usePolling: true, // Needed for docker file watching on some OS
     },

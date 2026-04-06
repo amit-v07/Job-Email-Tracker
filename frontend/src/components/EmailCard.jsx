@@ -43,29 +43,28 @@ export default function EmailCard({ email, onUpdate }) {
   return (
     <div className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
       email.is_unread
-        ? 'bg-gray-900 border-gray-700 shadow-lg shadow-black/20 hover:border-blue-500/30 hover:shadow-blue-950/30'
-        : 'bg-gray-900/60 border-gray-800 hover:border-gray-700'
+        ? 'bg-gray-900 border-gray-700 shadow-lg shadow-black/20'
+        : 'bg-gray-900/60 border-gray-800'
     }`}>
-      {/* Unread indicator bar */}
       {email.is_unread && <div className="h-0.5 w-full bg-gradient-to-r from-blue-600 to-indigo-600"/>}
 
-      <div className="p-5">
+      <div className="p-4 sm:p-5">
         {/* Top row */}
-        <div className="flex justify-between items-start mb-3">
-          <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex justify-between items-start mb-3 gap-2">
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
             {email.is_unread && (
               <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0 shadow-md shadow-blue-500/50"/>
             )}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800 rounded-lg text-sm font-semibold text-gray-200 border border-gray-700">
-              <Building size={14} className="text-gray-400"/>
-              {email.company || 'Unknown Company'}
+            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800 rounded-lg text-sm font-semibold text-gray-200 border border-gray-700 min-w-0">
+              <Building size={14} className="text-gray-400 shrink-0"/>
+              <span className="truncate">{email.company || 'Unknown Company'}</span>
             </div>
-            <span className="text-xs font-medium text-gray-500 bg-gray-800 px-2 py-1 rounded-md border border-gray-700/50">
+            <span className="text-xs font-medium text-gray-500 bg-gray-800 px-2 py-1 rounded-md border border-gray-700/50 shrink-0">
               {email.account}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0 ml-3">
+          <div className="flex items-center gap-2 shrink-0">
             <span className="text-xs text-gray-500">{timeAgo}</span>
 
             {/* Status dropdown */}
@@ -116,9 +115,9 @@ export default function EmailCard({ email, onUpdate }) {
         </div>
 
         {/* Subject */}
-        <h3 className="text-base font-bold text-gray-100 mb-1 leading-snug">{email.subject}</h3>
-        <div className="text-xs text-gray-500 mb-2">From: <span className="text-gray-400">{email.sender_name}</span> &lt;{email.sender_email}&gt;</div>
-        <p className="text-sm text-gray-500 truncate">{email.snippet}</p>
+        <h3 className="text-sm sm:text-base font-bold text-gray-100 mb-1 leading-snug">{email.subject}</h3>
+        <div className="text-xs text-gray-500 mb-2 truncate">From: <span className="text-gray-400">{email.sender_name}</span> &lt;{email.sender_email}&gt;</div>
+        <p className="text-sm text-gray-500 line-clamp-2 sm:truncate">{email.snippet}</p>
 
         {/* URL chips */}
         {email.urls && email.urls.length > 0 && (
